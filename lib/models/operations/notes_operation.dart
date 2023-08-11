@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:notes_apps/db/database_provider.dart';
 import 'package:notes_apps/models/note.dart';
 
 class NotesOperation with ChangeNotifier {
@@ -8,13 +9,16 @@ class NotesOperation with ChangeNotifier {
     return notes;
   }
 
-  NotesOperation() {
-    addNewNote('First Note', 'First Note Description');
+  void addNewNote(Note note) {
+    notes.add(note);
+    
+    notifyListeners();
   }
 
-  void addNewNote(String title, String description) {
-    Note note = Note(title, description);
-    notes.add(note);
+  Future<void> loadNote(DatabaseProvider databaseProvider) async {
+    final notes = await databaseProvider.getAllNotes();
+    note.clear();
+    note.addAll(notes);
 
     notifyListeners();
   }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:notes_apps/models/notes_operation.dart';
+import 'package:notes_apps/db/database_provider.dart';
+import 'package:notes_apps/models/operations/notes_operation.dart';
 import 'package:notes_apps/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MainApp());
 }
 
@@ -12,10 +15,19 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<NotesOperation>(
-      create: (context) {
-        return NotesOperation();
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) {
+            return NotesOperation();
+          },
+        ),
+        Provider(
+          create: (context) {
+            return DatabaseProvider();
+          },
+        ),
+      ],
       child: const MaterialApp(
         home: HomeScreen(),
       ),

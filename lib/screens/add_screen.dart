@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notes_apps/models/notes_operation.dart';
+import 'package:notes_apps/db/database_provider.dart';
+import 'package:notes_apps/models/note.dart';
+import 'package:notes_apps/models/operations/notes_operation.dart';
 import 'package:provider/provider.dart';
 
 class AddScreen extends StatelessWidget {
@@ -7,6 +9,10 @@ class AddScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final noteNotifier = context.read<NotesOperation>();
+
+    // var operation = Provider.of<NotesOperation>(context, listen: false);
+
     String titleText = "";
     String descriptionText = "";
 
@@ -76,14 +82,20 @@ class AddScreen extends StatelessWidget {
                 backgroundColor: Colors.white,
               ),
               onPressed: () {
-                Provider.of<NotesOperation>(
-                  context,
-                  listen: false,
-                ).addNewNote(
-                  titleText,
-                  descriptionText,
+                final note = Note(
+                  title: titleText,
+                  description: descriptionText,
                 );
+
+                noteNotifier.addNewNote(note);
                 Navigator.pop(context);
+
+                // await databaseProvider.insert(note).then((value) {
+                //   Navigator.pop(context);
+                // }).catchError((error) {
+                //   print("KESALAHAN: $error");
+                // });
+                // operation.addNewNote(titleText, descriptionText);
               },
               child: const Text(
                 'Add Note',

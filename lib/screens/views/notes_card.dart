@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:notes_apps/db/database_provider.dart';
 import 'package:notes_apps/models/note.dart';
-import 'package:notes_apps/models/notes_operation.dart';
+import 'package:notes_apps/models/operations/notes_operation.dart';
 import 'package:provider/provider.dart';
 
 class NotesCard extends StatelessWidget {
   final Note note;
-  final int index;
 
-  const NotesCard(this.note, this.index, {super.key});
+  const NotesCard(this.note, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    final noteNotifier = context.read<NotesOperation>();
+
+    // var operation = Provider.of<NotesOperation>(context, listen: false);
+
     return Container(
       margin: const EdgeInsets.all(15),
       padding: const EdgeInsets.all(15),
@@ -29,7 +33,7 @@ class NotesCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  note.title,
+                  note.title!,
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -39,7 +43,7 @@ class NotesCard extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  note.description,
+                  note.description!,
                   style: const TextStyle(
                     fontSize: 17,
                   ),
@@ -76,10 +80,9 @@ class NotesCard extends StatelessWidget {
                       TextButton(
                         child: const Text('Yes'),
                         onPressed: () {
-                          Provider.of<NotesOperation>(
-                            context,
-                            listen: false,
-                          ).deleteNote(index);
+                          // operation.deleteNote(index);
+                          // await databaseProvider.delete(note.id!);
+                          noteNotifier.deleteNote(note.id!);
                           Navigator.of(context).pop();
                         },
                       ),
